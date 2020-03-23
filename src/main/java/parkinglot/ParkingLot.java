@@ -1,3 +1,5 @@
+package parkinglot;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -5,27 +7,29 @@ public class ParkingLot {
 
     private int actualCapacity;
     private List vehicle;
-    private ParkingLotOwner owner;
-    private AirportSecurity security;
+    private List<iParkingLotObserver> observersList;
 
     public ParkingLot(int capacity) {
         vehicle = new ArrayList();
         this.actualCapacity = capacity;
+        this.observersList = new ArrayList<>();
     }
 
-    public void registerOwner(ParkingLotOwner owner) {
-        this.owner = owner;
+    public void registerObserver(iParkingLotObserver observer) {
+        observersList.add(observer);
     }
 
-    public void registerSecurity(AirportSecurity security) {
-        this.security = security;
+    public void setCapacity(int actualCapacity) {
+        this.actualCapacity = actualCapacity;
     }
 
     public void isParked(Object vehicle) {
         if (this.vehicle.size() == actualCapacity) {
-            owner.capacityIsFull();
-            security.capacityIsFull();
-            throw new ParkingLotException("Parking Lot Is Full", ParkingLotException.ExceptionType.PARKING_IS_FULL);
+            for (iParkingLotObserver observer :
+                    observersList) {
+                observer.capacityIsFull();
+                throw new ParkingLotException("Parking Lot Is Full", ParkingLotException.ExceptionType.PARKING_IS_FULL);
+            }
         }
         if (this.isVehicleParked(vehicle))
             throw new ParkingLotException("Vehicle Is Already Parked", ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARKED);
@@ -33,9 +37,7 @@ public class ParkingLot {
     }
 
     public boolean isVehicleParked(Object vehicle) {
-        if (this.vehicle.contains(vehicle))
-            return true;
-        return false;
+        return this.vehicle.contains(vehicle);
     }
 
     public boolean isUnParked(Object vehicle) {
@@ -44,9 +46,5 @@ public class ParkingLot {
             return true;
         }
         return false;
-    }
-
-    public void setCapacity(int actualCapacity) {
-        this.actualCapacity = actualCapacity;
     }
 }

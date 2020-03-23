@@ -1,8 +1,11 @@
+package parkinglot;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.Assert.*;
 
 public class ParkingLotTest {
     Object vehicle;
@@ -31,7 +34,7 @@ public class ParkingLotTest {
             boolean isParked2 = parkingLot.isVehicleParked(vehicle);
             assertTrue(isParked1 && isParked2);
         } catch (ParkingLotException e) {
-            assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARKED);
+            Assert.assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARKED);
         }
     }
 
@@ -45,7 +48,7 @@ public class ParkingLotTest {
     @Test
     public void givenWhenParkingLotIsFull_ShouldInformTheOwner() {
         ParkingLotOwner owner = new ParkingLotOwner();
-        parkingLot.registerOwner(owner);
+        parkingLot.registerObserver(owner);
         try {
             parkingLot.isParked(vehicle);
             parkingLot.isParked(new Object());
@@ -66,14 +69,14 @@ public class ParkingLotTest {
             boolean isParked2 = parkingLot.isVehicleParked(vehicle2);
             assertTrue(isParked1 && isParked2);
         } catch (ParkingLotException e) {
-            assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARKED);
+            Assert.assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARKED);
         }
     }
 
     @Test
     public void givenWhenParkingLotIsFull_ShouldInformTheAirportSecurity() {
         AirportSecurity security = new AirportSecurity();
-        parkingLot.registerSecurity(security);
+        parkingLot.registerObserver(security);
         try {
             parkingLot.isParked(vehicle);
             parkingLot.isParked(new Object());
