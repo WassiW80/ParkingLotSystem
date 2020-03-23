@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ParkingLotTest {
     Object vehicle;
@@ -80,9 +80,31 @@ public class ParkingLotTest {
         try {
             parkingLot.isParked(vehicle);
             parkingLot.isParked(new Object());
-        }catch (ParkingLotException e){
+        } catch (ParkingLotException e) {
             boolean capacityFull = security.isCapacityFull();
             assertTrue(capacityFull);
         }
+    }
+
+    @Test
+    public void givenAVehicle_WhenSpaceIsAvailable_ShouldInformTheOwner() {
+        ParkingLotOwner owner = new ParkingLotOwner();
+        parkingLot.registerObserver(owner);
+        parkingLot.isParked(vehicle);
+        parkingLot.isParked(new Object());
+        parkingLot.isUnParked(vehicle);
+        boolean capacityFull = owner.isCapacityFull();
+        assertFalse(capacityFull);
+    }
+
+    @Test
+    public void givenAVehicle_WhenSpaceIsAvailable_ShouldInformTheAirportSecurity() {
+        ParkingLotOwner owner = new ParkingLotOwner();
+        parkingLot.registerObserver(owner);
+        parkingLot.isParked(vehicle);
+        parkingLot.isParked(new Object());
+        parkingLot.isUnParked(vehicle);
+        boolean capacityFull = owner.isCapacityFull();
+        assertFalse(capacityFull);
     }
 }
