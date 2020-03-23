@@ -69,4 +69,17 @@ public class ParkingLotTest {
             assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARKED);
         }
     }
+
+    @Test
+    public void givenWhenParkingLotIsFull_ShouldInformTheAirportSecurity() {
+        AirportSecurity security = new AirportSecurity();
+        parkingLot.registerSecurity(security);
+        try {
+            parkingLot.isParked(vehicle);
+            parkingLot.isParked(new Object());
+        }catch (ParkingLotException e){
+            boolean capacityFull = security.isCapacityFull();
+            assertTrue(capacityFull);
+        }
+    }
 }

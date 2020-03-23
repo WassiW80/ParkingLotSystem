@@ -6,6 +6,7 @@ public class ParkingLot {
     private int actualCapacity;
     private List vehicle;
     private ParkingLotOwner owner;
+    private AirportSecurity security;
 
     public ParkingLot(int capacity) {
         vehicle = new ArrayList();
@@ -16,14 +17,19 @@ public class ParkingLot {
         this.owner = owner;
     }
 
+    public void registerSecurity(AirportSecurity security) {
+        this.security = security;
+    }
+
     public void isParked(Object vehicle) {
         if (this.vehicle.size() == actualCapacity) {
-            owner.isCapacityFull();
+            owner.capacityIsFull();
+            security.capacityIsFull();
             throw new ParkingLotException("Parking Lot Is Full", ParkingLotException.ExceptionType.PARKING_IS_FULL);
         }
         if (this.isVehicleParked(vehicle))
             throw new ParkingLotException("Vehicle Is Already Parked", ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARKED);
-            this.vehicle.add(vehicle);
+        this.vehicle.add(vehicle);
     }
 
     public boolean isVehicleParked(Object vehicle) {
@@ -40,8 +46,7 @@ public class ParkingLot {
         return false;
     }
 
-
     public void setCapacity(int actualCapacity) {
-        this.actualCapacity=actualCapacity;
+        this.actualCapacity = actualCapacity;
     }
 }
