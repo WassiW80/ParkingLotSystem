@@ -1,16 +1,18 @@
 package parkinglot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ParkingLot {
 
     private int actualCapacity;
-    private List vehicle;
+    private Map vehicle;
     private List<iParkingLotObserver> observersList;
 
     public ParkingLot(int capacity) {
-        vehicle = new ArrayList();
+        vehicle = new HashMap();
         this.actualCapacity = capacity;
         this.observersList = new ArrayList<>();
     }
@@ -21,9 +23,14 @@ public class ParkingLot {
 
     public void setCapacity(int actualCapacity) {
         this.actualCapacity = actualCapacity;
+        getCapacity();
     }
 
-    public void isParked(Object vehicle) {
+    public int getCapacity() {
+        return this.actualCapacity;
+    }
+
+    public void isParked(String slot, Object vehicle) {
         if (this.vehicle.size() == actualCapacity) {
             for (iParkingLotObserver observer :
                     observersList) {
@@ -31,18 +38,18 @@ public class ParkingLot {
                 throw new ParkingLotException("Parking Lot Is Full", ParkingLotException.ExceptionType.PARKING_IS_FULL);
             }
         }
-        if (this.isVehicleParked(vehicle))
-            throw new ParkingLotException("Vehicle Is Already Parked", ParkingLotException.ExceptionType.VEHICLE_IS_ALREADY_PARKED);
-        this.vehicle.add(vehicle);
+        if (this.isVehicleParked(slot))
+            throw new ParkingLotException("Slot is Full", ParkingLotException.ExceptionType.SLOT_IS_FULL);
+        this.vehicle.put(slot,vehicle);
     }
 
-    public boolean isVehicleParked(Object vehicle) {
-        return this.vehicle.contains(vehicle);
+    public boolean isVehicleParked(String slot) {
+        return this.vehicle.containsKey(slot);
     }
 
-    public boolean isUnParked(Object vehicle) {
-        if (this.vehicle.contains(vehicle)) {
-            this.vehicle.remove(vehicle);
+    public boolean isUnParked(String slot) {
+        if (this.vehicle.containsKey(slot)) {
+            this.vehicle.remove(slot);
             return true;
         }
         return false;
