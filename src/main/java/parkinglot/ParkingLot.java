@@ -1,18 +1,15 @@
 package parkinglot;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ParkingLot {
 
     private int actualCapacity;
-    private Map vehicle;
+    private Map<String, Object> vehicleMap;
     private List<iParkingLotObserver> observersList;
 
     public ParkingLot(int capacity) {
-        vehicle = new HashMap();
+        vehicleMap = new HashMap();
         this.actualCapacity = capacity;
         this.observersList = new ArrayList<>();
     }
@@ -31,7 +28,7 @@ public class ParkingLot {
     }
 
     public void isParked(String slot, Object vehicle) {
-        if (this.vehicle.size() == actualCapacity) {
+        if (this.vehicleMap.size() == actualCapacity) {
             for (iParkingLotObserver observer :
                     observersList) {
                 observer.capacityIsFull();
@@ -40,18 +37,27 @@ public class ParkingLot {
         }
         if (this.isVehicleParked(slot))
             throw new ParkingLotException("Slot is Full", ParkingLotException.ExceptionType.SLOT_IS_FULL);
-        this.vehicle.put(slot,vehicle);
+        this.vehicleMap.put(slot,vehicle);
     }
 
     public boolean isVehicleParked(String slot) {
-        return this.vehicle.containsKey(slot);
+        return this.vehicleMap.containsKey(slot);
     }
 
     public boolean isUnParked(String slot) {
-        if (this.vehicle.containsKey(slot)) {
-            this.vehicle.remove(slot);
+        if (this.vehicleMap.containsKey(slot)) {
+            this.vehicleMap.remove(slot);
             return true;
         }
         return false;
+    }
+
+    public String isVehicleFound(Object vehicle) {
+        for (Map.Entry<String, Object> entry : vehicleMap.entrySet()) {
+            if (entry.getValue().equals(vehicle)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 }

@@ -134,4 +134,12 @@ public class ParkingLotTest {
           assertEquals(e.type, ParkingLotException.ExceptionType.SLOT_IS_FULL);
       }
     }
+
+    @Test
+    public void givenAVehicle_WhenFound_ShouldReturnTrue() {
+        parkingLot.isParked("S01",vehicle);
+        parkingLot.isParked("S02",new Object());
+        String vehicleFound = parkingLot.isVehicleFound(vehicle);
+        assertEquals("S01",vehicleFound);
+    }
 }
