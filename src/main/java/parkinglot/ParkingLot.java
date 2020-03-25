@@ -1,12 +1,16 @@
 package parkinglot;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ParkingLot {
 
     private int actualCapacity;
     private Map<String, Object> vehicleMap;
     private List<iParkingLotObserver> observersList;
+    private int parkingTime;
 
     public ParkingLot(int capacity) {
         vehicleMap = new HashMap();
@@ -37,7 +41,7 @@ public class ParkingLot {
         }
         if (this.isVehicleParked(slot))
             throw new ParkingLotException("Slot is Full", ParkingLotException.ExceptionType.SLOT_IS_FULL);
-        this.vehicleMap.put(slot,vehicle);
+        this.vehicleMap.put(slot, vehicle);
     }
 
     public boolean isVehicleParked(String slot) {
@@ -59,5 +63,10 @@ public class ParkingLot {
             }
         }
         return null;
+    }
+
+    public int setParkingTime(int parkingTime) {
+        this.parkingTime = parkingTime;
+        return parkingTime;
     }
 }

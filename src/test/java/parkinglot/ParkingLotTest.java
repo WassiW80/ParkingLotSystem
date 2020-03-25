@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.Assert.*;
 
 public class ParkingLotTest {
@@ -111,35 +113,44 @@ public class ParkingLotTest {
     public void givenCapacity_WhenFullSlotAvailable_ShouldReturnTrue() {
         parkingLot.setCapacity(5);
         int capacity = parkingLot.getCapacity();
-        assertEquals(5,capacity);
+        assertEquals(5, capacity);
     }
 
     @Test
     public void givenAVehicle_WhenParkedOnAvailableSlot_ShouldReturnTrue() {
         parkingLot.setCapacity(3);
-        parkingLot.isParked("S01",vehicle);
+        parkingLot.isParked("S01", vehicle);
         boolean isParked = parkingLot.isVehicleParked("S01");
         assertTrue(isParked);
     }
 
     @Test
     public void givenAVehicle_WhenSlotIsFull_ShouldThrowException() {
-      try {
-          parkingLot.isParked("S01",vehicle);
-          parkingLot.isParked("S01",new Object());
-          boolean isParked1 = parkingLot.isVehicleParked("S01");
-          boolean isParked2 = parkingLot.isVehicleParked("S01");
-          assertTrue(isParked1&&isParked2);
-      }catch (ParkingLotException e){
-          assertEquals(e.type, ParkingLotException.ExceptionType.SLOT_IS_FULL);
-      }
+        try {
+            parkingLot.isParked("S01", vehicle);
+            parkingLot.isParked("S01", new Object());
+            boolean isParked1 = parkingLot.isVehicleParked("S01");
+            boolean isParked2 = parkingLot.isVehicleParked("S01");
+            assertTrue(isParked1 && isParked2);
+        } catch (ParkingLotException e) {
+            assertEquals(e.type, ParkingLotException.ExceptionType.SLOT_IS_FULL);
+        }
     }
 
     @Test
     public void givenAVehicle_WhenFound_ShouldReturnTrue() {
-        parkingLot.isParked("S01",vehicle);
-        parkingLot.isParked("S02",new Object());
+        parkingLot.isParked("S01", vehicle);
+        parkingLot.isParked("S02", new Object());
         String vehicleFound = parkingLot.isVehicleFound(vehicle);
-        assertEquals("S01",vehicleFound);
+        assertEquals("S01", vehicleFound);
+    }
+
+    @Test
+    public void givenAVehicle_WhenParkedSetTime_ShouldReturnTrue() {
+        int parkingTime = parkingLot.setParkingTime(LocalDateTime.now().getHour());
+        parkingLot.isParked("S01", vehicle);
+        boolean vehicleParked = parkingLot.isVehicleParked("S01");
+        System.out.println(parkingTime);
+        assertTrue(vehicleParked);
     }
 }
