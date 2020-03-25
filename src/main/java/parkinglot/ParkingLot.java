@@ -31,7 +31,7 @@ public class ParkingLot {
         return this.actualCapacity;
     }
 
-    public void isParked(String slot, Object vehicle) {
+    public void isParked(String slot, Object vehicle, Driver handicap) {
         if (this.vehicleMap.size() == actualCapacity) {
             for (iParkingLotObserver observer :
                     observersList) {
@@ -69,4 +69,6 @@ public class ParkingLot {
         this.parkingTime = parkingTime;
         return parkingTime;
     }
+
+    public enum Driver {NORMAL, HANDICAP}
 }
