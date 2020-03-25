@@ -153,4 +153,20 @@ public class ParkingLotTest {
         System.out.println(parkingTime);
         assertTrue(vehicleParked);
     }
+
+    @Test
+    public void givenAVehicle_WhenParkedEvenly_ShouldReturnTrue() {
+        parkingLot.setCapacity(10);
+        parkingLot.isParked("S01", vehicle);
+        parkingLot.isParked("S03", vehicle);
+        parkingLot.isParked("S05", vehicle);
+        parkingLot.isParked("S07", vehicle);
+        parkingLot.isParked("S09", vehicle);
+        boolean isParked1 = parkingLot.isVehicleParked("S01");
+        boolean isParked2 = parkingLot.isVehicleParked("S03");
+        boolean isParked3 = parkingLot.isVehicleParked("S05");
+        boolean isParked4 = parkingLot.isVehicleParked("S07");
+        boolean isParked5 = parkingLot.isVehicleParked("S09");
+        assertTrue(isParked1 && isParked2 && isParked3 && isParked4 && isParked5);
+    }
 }
