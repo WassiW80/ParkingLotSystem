@@ -146,11 +146,22 @@ public class ParkingLotTest {
     }
 
     @Test
+    public void givenAVehicle_WhenNotFound_ShouldThrowException() {
+        try {
+            parkingLot.isParked("S01", vehicle, ParkingLot.Driver.NORMAL);
+            parkingLot.isParked("S02", new Object(), ParkingLot.Driver.NORMAL);
+            String vehicleFound = parkingLot.isVehicleFound(new Object());
+            assertEquals("S01", vehicleFound);
+        } catch (ParkingLotException e) {
+            assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        }
+    }
+
+    @Test
     public void givenAVehicle_WhenParkedSetTime_ShouldReturnTrue() {
-        int parkingTime = parkingLot.setParkingTime(LocalDateTime.now().getHour());
+        parkingLot.setParkingTime(LocalDateTime.now().getHour());
         parkingLot.isParked("S01", vehicle, ParkingLot.Driver.NORMAL);
         boolean vehicleParked = parkingLot.isVehicleParked("S01");
-        System.out.println(parkingTime);
         assertTrue(vehicleParked);
     }
 
@@ -172,8 +183,10 @@ public class ParkingLotTest {
 
     @Test
     public void givenAVehicleWithHandicapDriver_WhenParkedAtNearestSlot_ShouldReturnTrue() {
-        parkingLot.isParked("S01",vehicle, ParkingLot.Driver.HANDICAP);
+        parkingLot.isParked("S01", vehicle, ParkingLot.Driver.NORMAL);
+        parkingLot.isParked("S01", vehicle, ParkingLot.Driver.HANDICAP);
         boolean isParked1 = parkingLot.isVehicleParked("S01");
-        assertTrue(isParked1);
+        boolean isParked2 = parkingLot.isVehicleParked("S2");
+        assertTrue(isParked1 && isParked2);
     }
 }

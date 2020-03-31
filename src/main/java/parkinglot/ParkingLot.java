@@ -7,12 +7,18 @@ import java.util.Map;
 
 public class ParkingLot {
 
+    private int slotNumber = 01;
+
+    public enum Driver {NORMAL, HANDICAP}
+
     private int actualCapacity;
     private Map<String, Object> vehicleMap;
     private List<iParkingLotObserver> observersList;
+    ParkingLotAvailability availability;
     private int parkingTime;
 
     public ParkingLot(int capacity) {
+        availability = new ParkingLotAvailability();
         vehicleMap = new HashMap();
         this.actualCapacity = capacity;
         this.observersList = new ArrayList<>();
@@ -31,17 +37,24 @@ public class ParkingLot {
         return this.actualCapacity;
     }
 
-    public void isParked(String slot, Object vehicle, Driver handicap) {
+    public void isParked(String slot, Object vehicle, Driver driver) {
         if (this.vehicleMap.size() == actualCapacity) {
-            for (iParkingLotObserver observer :
-                    observersList) {
-                observer.capacityIsFull();
-                throw new ParkingLotException("Parking Lot Is Full", ParkingLotException.ExceptionType.PARKING_IS_FULL);
-            }
+            availability.parkingFull();
+            throw new ParkingLotException("Parking Lot Is Full", ParkingLotException.ExceptionType.PARKING_IS_FULL);
         }
-        if (this.isVehicleParked(slot))
-            throw new ParkingLotException("Slot is Full", ParkingLotException.ExceptionType.SLOT_IS_FULL);
+        if (this.isVehicleParked(slot)) {
+            if (driver.equals(Driver.HANDICAP)) {
+                slot = getAutoParking(slot);
+            } else
+                throw new ParkingLotException("Slot is Full", ParkingLotException.ExceptionType.SLOT_IS_FULL);
+        }
         this.vehicleMap.put(slot, vehicle);
+    }
+
+    private String getAutoParking(String slot) {
+        if (this.vehicleMap.containsKey(slot))
+            slotNumber++;
+        return "S" + slotNumber;
     }
 
     public boolean isVehicleParked(String slot) {
@@ -51,6 +64,7 @@ public class ParkingLot {
     public boolean isUnParked(String slot) {
         if (this.vehicleMap.containsKey(slot)) {
             this.vehicleMap.remove(slot);
+            availability.parkingAvailable();
             return true;
         }
         return false;
@@ -62,13 +76,11 @@ public class ParkingLot {
                 return entry.getKey();
             }
         }
-        return null;
+        throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
     }
 
     public int setParkingTime(int parkingTime) {
         this.parkingTime = parkingTime;
         return parkingTime;
     }
-
-    public enum Driver {NORMAL, HANDICAP}
 }
