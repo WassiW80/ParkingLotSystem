@@ -32,8 +32,8 @@ public class MockitoTest {
         parkingLot.registerObserver(observer);
         when(observer.isCapacityFull()).thenReturn(true);
         try {
-            parkingLot.isParked("S01", vehicle, ParkingLot.Driver.NORMAL);
-            parkingLot.isParked("S02", new Object(), ParkingLot.Driver.NORMAL);
+            parkingLot.isParked("S01", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+            parkingLot.isParked("S02", new Object(), VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
         } catch (ParkingLotException e) {
             boolean capacityFull = observer.isCapacityFull();
             assertTrue(capacityFull);

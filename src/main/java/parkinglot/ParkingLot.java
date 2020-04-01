@@ -37,10 +37,13 @@ public class ParkingLot {
         return this.actualCapacity;
     }
 
-    public void isParked(String slot, Object vehicle, Driver driver) {
+    public void isParked(String slot, Object vehicle, VehicleType vehicleType, Driver driver) {
         if (this.vehicleMap.size() == actualCapacity) {
             availability.parkingFull();
             throw new ParkingLotException("Parking Lot Is Full", ParkingLotException.ExceptionType.PARKING_IS_FULL);
+        }
+        if (vehicleType.equals(VehicleType.LARGE_VEHICLE)) {
+            slot = getLargeParking(slot);
         }
         if (this.isVehicleParked(slot)) {
             if (driver.equals(Driver.HANDICAP)) {
@@ -49,6 +52,12 @@ public class ParkingLot {
                 throw new ParkingLotException("Slot is Full", ParkingLotException.ExceptionType.SLOT_IS_FULL);
         }
         this.vehicleMap.put(slot, vehicle);
+    }
+
+    private String getLargeParking(String slot) {
+        if (this.vehicleMap.containsKey(slot))
+            slotNumber++;
+        return "L0" + slotNumber;
     }
 
     private String getAutoParking(String slot) {
