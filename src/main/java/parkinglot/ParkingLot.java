@@ -55,9 +55,16 @@ public class ParkingLot {
     }
 
     private String getLargeParking(String slot) {
-        if (this.vehicleMap.containsKey(slot))
-            slotNumber++;
-        return "L0" + slotNumber;
+        for (int i = 1; i < actualCapacity; i++) {
+            int j = i + 1;
+            if (this.vehicleMap.get("S" + j--) == null && this.vehicleMap.get("S" + j++) == null)
+                if (this.vehicleMap.get("S" + j) == null) {
+                    slot = "S" + j;
+                    return slot;
+                }
+        }
+        throw new ParkingLotException("Slot is Full", ParkingLotException.ExceptionType.SLOT_IS_FULL);
+
     }
 
     private String getAutoParking(String slot) {

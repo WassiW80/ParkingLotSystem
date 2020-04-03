@@ -8,15 +8,15 @@ public class ParkingLotAvailability {
     static List<iParkingLotObserver> observerMap;
 
     public ParkingLotAvailability() {
-        observerMap=new ArrayList<>();
+        observerMap = new ArrayList<>();
     }
 
-    public void parkingFull(){
+    public void parkingFull() {
         for (iParkingLotObserver observers : observerMap)
             observers.capacityIsFull();
     }
 
-    public void parkingAvailable(){
+    public void parkingAvailable() {
         for (iParkingLotObserver observers : observerMap)
             observers.capacityIsAvailable();
     }

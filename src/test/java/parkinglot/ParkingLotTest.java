@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 import static org.junit.Assert.*;
 
 public class ParkingLotTest {
-    Object vehicle;
+    Vehicle vehicle;
     ParkingLot parkingLot;
 
     @Before
     public void setUp() {
-        vehicle = new Object();
+        vehicle = new Vehicle();
         parkingLot = new ParkingLot(2);
     }
 
@@ -183,7 +183,7 @@ public class ParkingLotTest {
 
     @Test
     public void givenAVehicleWithHandicapDriver_WhenParkedAtNearestSlot_ShouldReturnTrue() {
-        parkingLot.isParked("S01", vehicle,VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+        parkingLot.isParked("S01", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
         parkingLot.isParked("S01", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
         boolean isParked1 = parkingLot.isVehicleParked("S01");
         boolean isParked2 = parkingLot.isVehicleParked("S2");
@@ -192,8 +192,29 @@ public class ParkingLotTest {
 
     @Test
     public void givenALargeVehicle_WhenParked_ShouldReturnTrue() {
-        parkingLot.isParked("S01",vehicle, VehicleType.LARGE_VEHICLE, ParkingLot.Driver.NORMAL);
-        boolean isParked = parkingLot.isVehicleParked("L01");
-        assertTrue(isParked);
+        parkingLot.setCapacity(5);
+        parkingLot.isParked("S1", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+        parkingLot.isParked("S3", vehicle, VehicleType.LARGE_VEHICLE, ParkingLot.Driver.NORMAL);
+        boolean isParked = parkingLot.isVehicleParked("S1");
+        boolean isParked1 = parkingLot.isVehicleParked("S3");
+        assertTrue(isParked && isParked1);
+    }
+
+    @Test
+    public void givenALargeVehicle_WhenNotParked_ShouldThrowException() {
+        try {
+            parkingLot.setCapacity(5);
+            parkingLot.isParked("S1", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+            parkingLot.isParked("S3", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+            parkingLot.isParked("S4", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+            parkingLot.isParked("S5", vehicle, VehicleType.LARGE_VEHICLE, ParkingLot.Driver.NORMAL);
+            boolean isParked = parkingLot.isVehicleParked("S1");
+            boolean isParked1 = parkingLot.isVehicleParked("S3");
+            boolean isParked2 = parkingLot.isVehicleParked("S4");
+            boolean isParked3 = parkingLot.isVehicleParked("S5");
+            assertTrue(isParked && isParked1 && isParked2 && isParked3);
+        } catch (ParkingLotException e) {
+            assertEquals(e.type, ParkingLotException.ExceptionType.SLOT_IS_FULL);
+        }
     }
 }

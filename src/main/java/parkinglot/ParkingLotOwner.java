@@ -15,6 +15,6 @@ public class ParkingLotOwner implements iParkingLotObserver {
 
     @Override
     public void capacityIsAvailable() {
-        isFullCapacity=false;
+        isFullCapacity = false;
     }
 }
