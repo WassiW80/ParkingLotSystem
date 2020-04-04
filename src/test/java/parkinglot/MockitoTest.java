@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class MockitoTest {
-    Object vehicle;
+    Vehicle vehicle;
     ParkingLot parkingLot;
 
     @Mock
@@ -22,7 +22,7 @@ public class MockitoTest {
 
     @Before
     public void setUp() {
-        vehicle = new Object();
+        vehicle = new Vehicle();
         parkingLot = new ParkingLot(2);
         observer = mock(iParkingLotObserver.class);
     }
@@ -33,7 +33,7 @@ public class MockitoTest {
         when(observer.isCapacityFull()).thenReturn(true);
         try {
             parkingLot.isParked("S01", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
-            parkingLot.isParked("S02", new Object(), VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+            parkingLot.isParked("S02", new Vehicle(), VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
         } catch (ParkingLotException e) {
             boolean capacityFull = observer.isCapacityFull();
             assertTrue(capacityFull);

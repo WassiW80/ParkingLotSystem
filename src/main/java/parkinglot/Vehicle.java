@@ -11,5 +11,7 @@ public class Vehicle {
         this.color = color;
     }
 
-
+    public String getColor() {
+        return this.color;
+    }
 }

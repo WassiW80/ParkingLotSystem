@@ -12,7 +12,7 @@ public class ParkingLot {
     public enum Driver {NORMAL, HANDICAP}
 
     private int actualCapacity;
-    private Map<String, Object> vehicleMap;
+    private Map<String, Vehicle> vehicleMap;
     private List<iParkingLotObserver> observersList;
     ParkingLotAvailability availability;
     private int parkingTime;
@@ -37,7 +37,7 @@ public class ParkingLot {
         return this.actualCapacity;
     }
 
-    public void isParked(String slot, Object vehicle, VehicleType vehicleType, Driver driver) {
+    public void isParked(String slot, Vehicle vehicle, VehicleType vehicleType, Driver driver) {
         if (this.vehicleMap.size() == actualCapacity) {
             availability.parkingFull();
             throw new ParkingLotException("Parking Lot Is Full", ParkingLotException.ExceptionType.PARKING_IS_FULL);
@@ -86,12 +86,22 @@ public class ParkingLot {
         return false;
     }
 
-    public String isVehicleFound(Object vehicle) {
-        for (Map.Entry<String, Object> entry : vehicleMap.entrySet()) {
+    public String isVehicleFound(Vehicle vehicle) {
+        for (Map.Entry<String, Vehicle> entry : vehicleMap.entrySet()) {
             if (entry.getValue().equals(vehicle)) {
                 return entry.getKey();
             }
         }
+        throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+    }
+
+    public String findVehicleByColor(Vehicle vehicle, String color) {
+        if (vehicle.getColor() == color)
+            for (Map.Entry<String, Vehicle> entry : vehicleMap.entrySet()) {
+                if (entry.getValue().equals(vehicle)) {
+                    return entry.getKey();
+                }
+            }
         throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
     }
 
