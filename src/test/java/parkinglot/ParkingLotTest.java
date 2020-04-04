@@ -239,4 +239,24 @@ public class ParkingLotTest {
             assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
         }
     }
+
+    @Test
+    public void givenABlueToyotaToFindCarLocation_WhenFound_ShouldReturnTrue() {
+        Vehicle vehicle = new Vehicle("Blue", "Toyota", "MH01-MT6458");
+        parkingLot.isParked("S1", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+        String location = parkingLot.findVehicleByColorAndType(vehicle, "Blue", "Toyota");
+        assertEquals("S1", location);
+    }
+
+    @Test
+    public void givenABlueToyotaTOFindCarLocation_WhenNotFound_ShouldThrowException() {
+        try {
+            Vehicle vehicle = new Vehicle("Black", "Toyota", "MH01-MT6458");
+            parkingLot.isParked("S1", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+            String location = parkingLot.findVehicleByColorAndType(vehicle, "Blue", "Toyota");
+            assertEquals("S1", location);
+        }catch (ParkingLotException e){
+            assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        }
+    }
 }

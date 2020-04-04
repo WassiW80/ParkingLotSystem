@@ -105,6 +105,16 @@ public class ParkingLot {
         throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
     }
 
+    public String findVehicleByColorAndType(Vehicle vehicle, String color, String type) {
+        if (vehicle.getColor() == color && vehicle.getType()==type)
+            for (Map.Entry<String, Vehicle> entry : vehicleMap.entrySet()) {
+                if (entry.getValue().equals(vehicle)) {
+                    return entry.getKey();
+                }
+            }
+        throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+    }
+
     public int setParkingTime(int parkingTime) {
         this.parkingTime = parkingTime;
         return parkingTime;
