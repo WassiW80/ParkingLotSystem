@@ -149,6 +149,18 @@ public class ParkingLot {
         return arrayList;
     }
 
+    public ArrayList findAllVehicle() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 1; i <= this.vehicleMap.size(); i++) {
+            if (this.vehicleMap.get("S" + i) != null) {
+                    arrayList.add("S" + i);
+            }
+        }
+        if (arrayList.size() == 0)
+            throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        return arrayList;
+    }
+
     public int setParkingTime(int parkingTime) {
         this.parkingTime = parkingTime;
         return parkingTime;

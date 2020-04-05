@@ -343,5 +343,34 @@ public class ParkingLotTest {
         assertEquals(expectedResult, location);
     }
 
+    @Test
+    public void givenAVehicleToFindAllVehicle_WhenFound_ShouldReturnTrue() {
+        parkingLot.setCapacity(10);
+        Vehicle vehicle1 = new Vehicle("Black", "Honda", "MH02-MD6475");
+        Vehicle vehicle2 = new Vehicle("Blue", "Innova", "MH02-MD6875");
+        Vehicle vehicle3 = new Vehicle("White", "Toyota", "MH04-MD6475");
+        Vehicle vehicle4 = new Vehicle("White", "Skoda", "MH02-WA551");
+        parkingLot.isParked("S1", vehicle1, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+        parkingLot.isParked("S2", vehicle2, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+        parkingLot.isParked("S3", vehicle3, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+        parkingLot.isParked("S4", vehicle4, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
+        ArrayList location = parkingLot.findAllVehicle();
+        ArrayList<String> expectedResult = new ArrayList<>();
+        expectedResult.add("S1");
+        expectedResult.add("S2");
+        expectedResult.add("S3");
+        expectedResult.add("S4");
+        assertEquals(expectedResult, location);
+    }
 
+    @Test
+    public void givenAVehicleToFindAllVehicle_WhenNotFound_ShouldThrowException() {
+        try {
+            ArrayList location = parkingLot.findAllVehicle();
+            ArrayList<String> expectedResult = new ArrayList<>();
+            assertEquals(expectedResult, location);
+        } catch (ParkingLotException e) {
+            assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        }
+    }
 }
