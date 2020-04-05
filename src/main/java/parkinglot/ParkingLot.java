@@ -95,24 +95,32 @@ public class ParkingLot {
         throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
     }
 
-    public String findVehicleByColor(Vehicle vehicle, String color) {
-        if (vehicle.getColor() == color)
-            for (Map.Entry<String, Vehicle> entry : vehicleMap.entrySet()) {
-                if (entry.getValue().equals(vehicle)) {
-                    return entry.getKey();
+    public ArrayList<String> findVehicleByColor(String color) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 1; i <= this.vehicleMap.size(); i++) {
+            if (this.vehicleMap.get("S" + i) != null) {
+                if (this.vehicleMap.get("S" + i).getColor().equals(color)) {
+                    arrayList.add("S" + i);
                 }
             }
-        throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        }
+        if (arrayList.size() == 0)
+            throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        return arrayList;
     }
 
-    public String findVehicleByColorAndType(Vehicle vehicle, String color, String type) {
-        if (vehicle.getColor() == color && vehicle.getType()==type)
-            for (Map.Entry<String, Vehicle> entry : vehicleMap.entrySet()) {
-                if (entry.getValue().equals(vehicle)) {
-                    return entry.getKey();
+    public ArrayList<String> findVehicleByColorAndType(String color, String CarModel) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 1; i <= this.vehicleMap.size(); i++) {
+            if (this.vehicleMap.get("S" + i) != null) {
+                if (this.vehicleMap.get("S" + i).getColor().equals(color) && this.vehicleMap.get("S" + i).getCarModel().equals(CarModel)) {
+                    arrayList.add("S" + i);
                 }
             }
-        throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        }
+        if (arrayList.size() == 0)
+            throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        return arrayList;
     }
 
     public int setParkingTime(int parkingTime) {

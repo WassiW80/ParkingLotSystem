@@ -2,7 +2,7 @@ package parkinglot;
 
 public class Vehicle {
     String color;
-    String type;
+    String CarModel;
     String numberPlate;
     public Vehicle() {
 
@@ -12,9 +12,9 @@ public class Vehicle {
         this.color = color;
     }
 
-    public Vehicle(String color, String type, String numberPlate) {
+    public Vehicle(String color, String CarModel, String numberPlate) {
         this.color = color;
-        this.type = type;
+        this.CarModel = CarModel;
         this.numberPlate = numberPlate;
     }
 
@@ -22,7 +22,7 @@ public class Vehicle {
         return this.color;
     }
 
-    public String getType() {
-        return this.type;
+    public String getCarModel() {
+        return this.CarModel;
     }
 }
