@@ -45,11 +45,8 @@ public class ParkingLot {
         if (vehicleType.equals(VehicleType.LARGE_VEHICLE)) {
             slot = getLargeParking(slot);
         }
-        if (this.isVehicleParked(slot)) {
-            if (driver.equals(Driver.HANDICAP)) {
-                slot = getAutoParking(slot);
-            } else
-                throw new ParkingLotException("Slot is Full", ParkingLotException.ExceptionType.SLOT_IS_FULL);
+        if (driver.equals(Driver.HANDICAP)) {
+            slot = getAutoParking(slot);
         }
         this.vehicleMap.put(slot, vehicle);
     }
@@ -68,9 +65,10 @@ public class ParkingLot {
     }
 
     private String getAutoParking(String slot) {
-        if (this.vehicleMap.containsKey(slot))
-            slotNumber++;
-        return "S" + slotNumber;
+        for (int i = 1; i <= this.actualCapacity; i++)
+            if (this.vehicleMap.get("S" + i) == null)
+                slot = "S" + i;
+        return slot;
     }
 
     public boolean isVehicleParked(String slot) {
@@ -114,6 +112,20 @@ public class ParkingLot {
         for (int i = 1; i <= this.vehicleMap.size(); i++) {
             if (this.vehicleMap.get("S" + i) != null) {
                 if (this.vehicleMap.get("S" + i).getColor().equals(color) && this.vehicleMap.get("S" + i).getCarModel().equals(CarModel)) {
+                    arrayList.add("S" + i);
+                }
+            }
+        }
+        if (arrayList.size() == 0)
+            throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        return arrayList;
+    }
+
+    public ArrayList<String> findVehicleByModel(String model) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 1; i <= this.vehicleMap.size(); i++) {
+            if (this.vehicleMap.get("S" + i) != null) {
+                if (this.vehicleMap.get("S" + i).getCarModel().equals(model)) {
                     arrayList.add("S" + i);
                 }
             }
