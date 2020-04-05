@@ -160,7 +160,7 @@ public class ParkingLotTest {
 
     @Test
     public void givenAVehicle_WhenParkedSetTime_ShouldReturnTrue() {
-        parkingLot.setParkingTime(LocalDateTime.now().getHour());
+        parkingLot.setParkingTime(LocalDateTime.now().getMinute());
         parkingLot.isParked("S01", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
         boolean vehicleParked = parkingLot.isVehicleParked("S01");
         assertTrue(vehicleParked);
@@ -278,5 +278,25 @@ public class ParkingLotTest {
         expectedResult.add("S2");
         expectedResult.add("S4");
         assertEquals(expectedResult, location);
+    }
+
+    @Test
+    public void givenAVehicleToFindByTime_WhenFound_ShouldReturnTrue() {
+        parkingLot.setParkingTime(LocalDateTime.now().getMinute() - 30);
+        parkingLot.isParked("S1", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+        boolean parked30MinuteBefore = parkingLot.findVehicleWhichParked30MinuteBefore(LocalDateTime.now().getMinute());
+        assertTrue(parked30MinuteBefore);
+    }
+
+    @Test
+    public void givenAVehicleTOFindByTime_WhenNotFound_ShouldThrowException() {
+        try {
+            parkingLot.setParkingTime(LocalDateTime.now().getMinute() + 30);
+            parkingLot.isParked("S1", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+            boolean parked30MinuteBefore = parkingLot.findVehicleWhichParked30MinuteBefore(LocalDateTime.now().getMinute());
+            assertTrue(parked30MinuteBefore);
+        } catch (ParkingLotException e) {
+            assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        }
     }
 }

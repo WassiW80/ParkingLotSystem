@@ -139,4 +139,10 @@ public class ParkingLot {
         this.parkingTime = parkingTime;
         return parkingTime;
     }
+
+    public boolean findVehicleWhichParked30MinuteBefore(int parkingTime) {
+        if (this.parkingTime - parkingTime <= 0)
+            return true;
+        throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+    }
 }
