@@ -184,9 +184,9 @@ public class ParkingLotTest {
 
     @Test
     public void givenAVehicleWithHandicapDriver_WhenParkedAtNearestSlot_ShouldReturnTrue() {
-        parkingLot.isParked("S01", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
-        parkingLot.isParked("S02", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
-        boolean isParked1 = parkingLot.isVehicleParked("S01");
+        parkingLot.isParked("S1", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+        parkingLot.isParked("S2", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
+        boolean isParked1 = parkingLot.isVehicleParked("S1");
         boolean isParked2 = parkingLot.isVehicleParked("S2");
         assertTrue(isParked1 && isParked2);
     }
@@ -273,7 +273,7 @@ public class ParkingLotTest {
         parkingLot.isParked("S3", vehicle3, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
         parkingLot.isParked("S4", vehicle4, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
         ArrayList location = parkingLot.findVehicleByModel("BMW");
-        ArrayList<Object> expectedResult = new ArrayList<>();
+        ArrayList<String> expectedResult = new ArrayList<>();
         expectedResult.add("S1");
         expectedResult.add("S2");
         expectedResult.add("S4");
@@ -281,17 +281,40 @@ public class ParkingLotTest {
     }
 
     @Test
+    public void givenABMWToFindCarLocation_WhenNotFound_ShouldThrowException() {
+        try {
+            parkingLot.setCapacity(10);
+            Vehicle vehicle1 = new Vehicle("Black", "Honda", "MH02-MD6475");
+            Vehicle vehicle2 = new Vehicle("Blue", "Innova", "MH02-MD6875");
+            Vehicle vehicle3 = new Vehicle("White", "Toyota", "MH04-MD6475");
+            Vehicle vehicle4 = new Vehicle("White", "Skoda", "MH02-WA551");
+            parkingLot.isParked("S1", vehicle1, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+            parkingLot.isParked("S2", vehicle2, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+            parkingLot.isParked("S3", vehicle3, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+            parkingLot.isParked("S4", vehicle4, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
+            ArrayList location = parkingLot.findVehicleByModel("BMW");
+            ArrayList<String> expectedResult = new ArrayList<>();
+            expectedResult.add("S1");
+            expectedResult.add("S2");
+            expectedResult.add("S4");
+            assertEquals(expectedResult, location);
+        } catch (ParkingLotException e) {
+            assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        }
+    }
+
+    @Test
     public void givenAVehicleToFindByTime_WhenFound_ShouldReturnTrue() {
-        parkingLot.setParkingTime(LocalDateTime.now().getMinute() - 30);
+        parkingLot.setParkingTime(LocalDateTime.now().getMinute() - 20);
         parkingLot.isParked("S1", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
         boolean parked30MinuteBefore = parkingLot.findVehicleWhichParked30MinuteBefore(LocalDateTime.now().getMinute());
         assertTrue(parked30MinuteBefore);
     }
 
     @Test
-    public void givenAVehicleTOFindByTime_WhenNotFound_ShouldThrowException() {
+    public void givenAVehicleToFindByTime_WhenNotFound_ShouldThrowException() {
         try {
-            parkingLot.setParkingTime(LocalDateTime.now().getMinute() + 30);
+            parkingLot.setParkingTime(LocalDateTime.now().getMinute() + 40);
             parkingLot.isParked("S1", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
             boolean parked30MinuteBefore = parkingLot.findVehicleWhichParked30MinuteBefore(LocalDateTime.now().getMinute());
             assertTrue(parked30MinuteBefore);
@@ -299,4 +322,26 @@ public class ParkingLotTest {
             assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
         }
     }
+
+    @Test
+    public void givenAVehicleToFindHandicapDriverAndSmall_WhenFound_ShouldReturnTrue() {
+        parkingLot.setCapacity(5);
+        Vehicle vehicle1 = new Vehicle("Black", "BMW", "MH02-MD6475");
+        Vehicle vehicle2 = new Vehicle("Blue", "BMW", "MH02-MD6875");
+        Vehicle vehicle3 = new Vehicle("White", "Toyota", "MH04-MD6475");
+        Vehicle vehicle4 = new Vehicle("White", "BMW", "MH02-WA551");
+        parkingLot.isParked("S1", vehicle1, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
+        parkingLot.isParked("S2", vehicle2, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
+        parkingLot.isParked("S3", vehicle3, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
+        parkingLot.isParked("S4", vehicle4, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
+        ArrayList location = parkingLot.findVehicleByDriverTypeAndVehicleType(VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
+        ArrayList<Object> expectedResult = new ArrayList<>();
+        expectedResult.add("S1");
+        expectedResult.add("S2");
+        expectedResult.add("S3");
+        expectedResult.add("S4");
+        assertEquals(expectedResult, location);
+    }
+
+
 }

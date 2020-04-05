@@ -7,8 +7,6 @@ import java.util.Map;
 
 public class ParkingLot {
 
-    private int slotNumber = 01;
-
     public enum Driver {NORMAL, HANDICAP}
 
     private int actualCapacity;
@@ -66,9 +64,11 @@ public class ParkingLot {
 
     private String getAutoParking(String slot) {
         for (int i = 1; i <= this.actualCapacity; i++)
-            if (this.vehicleMap.get("S" + i) == null)
+            if (this.vehicleMap.get("S" + i) == null) {
                 slot = "S" + i;
-        return slot;
+                return slot;
+            }
+        throw new ParkingLotException("Slot is Full", ParkingLotException.ExceptionType.SLOT_IS_FULL);
     }
 
     public boolean isVehicleParked(String slot) {
@@ -126,6 +126,20 @@ public class ParkingLot {
         for (int i = 1; i <= this.vehicleMap.size(); i++) {
             if (this.vehicleMap.get("S" + i) != null) {
                 if (this.vehicleMap.get("S" + i).getCarModel().equals(model)) {
+                    arrayList.add("S" + i);
+                }
+            }
+        }
+        if (arrayList.size() == 0)
+            throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
+        return arrayList;
+    }
+
+    public ArrayList findVehicleByDriverTypeAndVehicleType(VehicleType vehicle, Driver driver) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 1; i <= this.vehicleMap.size(); i++) {
+            if (this.vehicleMap.get("S" + i) != null) {
+                if (vehicle.equals(VehicleType.NORMAL_VEHICLE) && driver.equals(Driver.HANDICAP)) {
                     arrayList.add("S" + i);
                 }
             }
