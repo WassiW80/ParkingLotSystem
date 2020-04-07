@@ -4,6 +4,7 @@ public class Vehicle {
     String color;
     String CarModel;
     String numberPlate;
+
     public Vehicle() {
 
     }

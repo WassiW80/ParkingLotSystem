@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ParkingLot {
 
@@ -93,50 +94,33 @@ public class ParkingLot {
         throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
     }
 
-    public ArrayList<String> findVehicleByColor(String color) {
-        ArrayList<String> arrayList = new ArrayList<>();
-        for (int i = 1; i <= this.vehicleMap.size(); i++) {
-            if (this.vehicleMap.get("S" + i) != null) {
-                if (this.vehicleMap.get("S" + i).getColor().equals(color)) {
-                    arrayList.add("S" + i);
-                }
-            }
-        }
-        if (arrayList.size() == 0)
-            throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
-        return arrayList;
+    public List findVehicleByColor(String color) {
+        List<String> arrayList;
+        arrayList = vehicleMap.entrySet().stream()
+                .filter(map -> map.getValue().getColor().equals(color))
+                .map(map -> map.getKey())
+                .collect(Collectors.toList());
+        return getArrayListSize(arrayList);
     }
 
-    public ArrayList<String> findVehicleByColorAndType(String color, String CarModel) {
-        ArrayList<String> arrayList = new ArrayList<>();
-        for (int i = 1; i <= this.vehicleMap.size(); i++) {
-            if (this.vehicleMap.get("S" + i) != null) {
-                if (this.vehicleMap.get("S" + i).getColor().equals(color) && this.vehicleMap.get("S" + i).getCarModel().equals(CarModel)) {
-                    arrayList.add("S" + i);
-                }
-            }
-        }
-        if (arrayList.size() == 0)
-            throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
-        return arrayList;
+    public List findVehicleByColorAndType(String color, String carModel) {
+        List<String> arrayList;
+        arrayList = findVehicleByColor(color);
+        arrayList = findVehicleByModel(carModel);
+        return getArrayListSize(arrayList);
     }
 
-    public ArrayList<String> findVehicleByModel(String model) {
-        ArrayList<String> arrayList = new ArrayList<>();
-        for (int i = 1; i <= this.vehicleMap.size(); i++) {
-            if (this.vehicleMap.get("S" + i) != null) {
-                if (this.vehicleMap.get("S" + i).getCarModel().equals(model)) {
-                    arrayList.add("S" + i);
-                }
-            }
-        }
-        if (arrayList.size() == 0)
-            throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
-        return arrayList;
+    public List findVehicleByModel(String model) {
+        List<String> arrayList;
+        arrayList = vehicleMap.entrySet().stream()
+                .filter(map -> map.getValue().getCarModel().equals(model))
+                .map(map -> map.getKey())
+                .collect(Collectors.toList());
+        return getArrayListSize(arrayList);
     }
 
-    public ArrayList findVehicleByDriverTypeAndVehicleType(VehicleType vehicle, Driver driver) {
-        ArrayList<String> arrayList = new ArrayList<>();
+    public List findVehicleByDriverTypeAndVehicleType(VehicleType vehicle, Driver driver) {
+        List<String> arrayList = new ArrayList<>();
         for (int i = 1; i <= this.vehicleMap.size(); i++) {
             if (this.vehicleMap.get("S" + i) != null) {
                 if (vehicle.equals(VehicleType.NORMAL_VEHICLE) && driver.equals(Driver.HANDICAP)) {
@@ -144,18 +128,18 @@ public class ParkingLot {
                 }
             }
         }
-        if (arrayList.size() == 0)
-            throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
-        return arrayList;
+        return getArrayListSize(arrayList);
     }
 
-    public ArrayList findAllVehicle() {
-        ArrayList<String> arrayList = new ArrayList<>();
-        for (int i = 1; i <= this.vehicleMap.size(); i++) {
-            if (this.vehicleMap.get("S" + i) != null) {
-                    arrayList.add("S" + i);
-            }
-        }
+    public List findAllVehicle() {
+        List<String> arrayList;
+        arrayList = vehicleMap.entrySet().stream()
+                .map(map -> map.getKey())
+                .collect(Collectors.toList());
+        return getArrayListSize(arrayList);
+    }
+
+    private List getArrayListSize(List<String> arrayList) {
         if (arrayList.size() == 0)
             throw new ParkingLotException("Vehicle Not Found", ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
         return arrayList;

@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -225,7 +226,7 @@ public class ParkingLotTest {
         Vehicle vehicle2 = new Vehicle("White");
         parkingLot.isParked("S1", vehicle1, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
         parkingLot.isParked("S2", vehicle2, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
-        ArrayList location = parkingLot.findVehicleByColor("White");
+        List location = parkingLot.findVehicleByColor("White");
         assertEquals("S1", location.get(0));
     }
 
@@ -234,7 +235,7 @@ public class ParkingLotTest {
         try {
             Vehicle vehicle2 = new Vehicle("Black");
             parkingLot.isParked("S1", vehicle2, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
-            ArrayList<String> location = parkingLot.findVehicleByColor("White");
+            List location = parkingLot.findVehicleByColor("White");
             assertEquals("S1", location);
         } catch (ParkingLotException e) {
             assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
@@ -245,7 +246,7 @@ public class ParkingLotTest {
     public void givenABlueToyotaToFindCarLocation_WhenFound_ShouldReturnTrue() {
         Vehicle vehicle = new Vehicle("Blue", "Toyota", "MH01-MT6458");
         parkingLot.isParked("S1", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
-        ArrayList<String> location = parkingLot.findVehicleByColorAndType("Blue", "Toyota");
+        List location = parkingLot.findVehicleByColorAndType("Blue", "Toyota");
         assertEquals("S1", location.get(0));
     }
 
@@ -254,7 +255,7 @@ public class ParkingLotTest {
         try {
             Vehicle vehicle = new Vehicle("Black", "Toyota", "MH01-MT6458");
             parkingLot.isParked("S1", vehicle, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
-            ArrayList location = parkingLot.findVehicleByColorAndType("Blue", "Toyota");
+            List location = parkingLot.findVehicleByColorAndType("Blue", "Toyota");
             assertEquals("S1", location);
         } catch (ParkingLotException e) {
             assertEquals(e.type, ParkingLotException.ExceptionType.VEHICLE_NOT_FOUND);
@@ -272,11 +273,11 @@ public class ParkingLotTest {
         parkingLot.isParked("S2", vehicle2, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
         parkingLot.isParked("S3", vehicle3, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
         parkingLot.isParked("S4", vehicle4, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
-        ArrayList location = parkingLot.findVehicleByModel("BMW");
-        ArrayList<String> expectedResult = new ArrayList<>();
+        List location = parkingLot.findVehicleByModel("BMW");
+        List expectedResult = new ArrayList<>();
+        expectedResult.add("S4");
         expectedResult.add("S1");
         expectedResult.add("S2");
-        expectedResult.add("S4");
         assertEquals(expectedResult, location);
     }
 
@@ -292,7 +293,7 @@ public class ParkingLotTest {
             parkingLot.isParked("S2", vehicle2, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
             parkingLot.isParked("S3", vehicle3, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
             parkingLot.isParked("S4", vehicle4, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
-            ArrayList location = parkingLot.findVehicleByModel("BMW");
+            List location = parkingLot.findVehicleByModel("BMW");
             ArrayList<String> expectedResult = new ArrayList<>();
             expectedResult.add("S1");
             expectedResult.add("S2");
@@ -334,7 +335,7 @@ public class ParkingLotTest {
         parkingLot.isParked("S2", vehicle2, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
         parkingLot.isParked("S3", vehicle3, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
         parkingLot.isParked("S4", vehicle4, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
-        ArrayList location = parkingLot.findVehicleByDriverTypeAndVehicleType(VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
+        List location = parkingLot.findVehicleByDriverTypeAndVehicleType(VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
         ArrayList<Object> expectedResult = new ArrayList<>();
         expectedResult.add("S1");
         expectedResult.add("S2");
@@ -354,19 +355,19 @@ public class ParkingLotTest {
         parkingLot.isParked("S2", vehicle2, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
         parkingLot.isParked("S3", vehicle3, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.NORMAL);
         parkingLot.isParked("S4", vehicle4, VehicleType.NORMAL_VEHICLE, ParkingLot.Driver.HANDICAP);
-        ArrayList location = parkingLot.findAllVehicle();
+        List location = parkingLot.findAllVehicle();
         ArrayList<String> expectedResult = new ArrayList<>();
-        expectedResult.add("S1");
-        expectedResult.add("S2");
         expectedResult.add("S3");
         expectedResult.add("S4");
+        expectedResult.add("S1");
+        expectedResult.add("S2");
         assertEquals(expectedResult, location);
     }
 
     @Test
     public void givenAVehicleToFindAllVehicle_WhenNotFound_ShouldThrowException() {
         try {
-            ArrayList location = parkingLot.findAllVehicle();
+            List location = parkingLot.findAllVehicle();
             ArrayList<String> expectedResult = new ArrayList<>();
             assertEquals(expectedResult, location);
         } catch (ParkingLotException e) {
